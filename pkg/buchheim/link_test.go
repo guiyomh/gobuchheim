@@ -27,3 +27,19 @@ func TestRemoveLink(t *testing.T) {
 
 	})
 }
+
+func TestLinkListAdd(t *testing.T) {
+	t.Run("Should add a link in the list", func(t *testing.T) {
+		list := LinkList{}
+		l := NewLink("a", "b")
+		list.Add(l)
+		assert.Len(t, list, 1)
+	})
+
+	t.Run("Should doesn't add a link in the list", func(t *testing.T) {
+		list := LinkList{NewLink("a", "b"), NewLink("b", "c")}
+		l := NewLink("a", "b")
+		list.Add(l)
+		assert.Len(t, list, 2)
+	})
+}

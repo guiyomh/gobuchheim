@@ -120,3 +120,12 @@ func (nl NodeList) FindByID(id string) (Node, error) {
 
 	return nil, errors.New(`Node "` + id + `" not found`)
 }
+
+// Add append a node in the list only if the node isn't in th list
+func (nl *NodeList) Add(n Node) {
+	_, err := nl.FindByID(n.ID())
+	if err == nil {
+		return
+	}
+	*nl = append(*nl, n)
+}

@@ -5,6 +5,8 @@
 
 package buchheim
 
+import "github.com/pkg/errors"
+
 // Link represents a link between 2 Nodes
 //go:generate mockery --name=Link  --output=mocks --filename=link.go --outpkg=mocks
 type Link interface {
@@ -63,4 +65,24 @@ func (ll LinkList) Remove(i int) LinkList {
 	ll[i] = ll[len(ll)-1]
 
 	return ll[:len(ll)-1]
+}
+
+// FindByIDs search a link in the list
+func (ll LinkList) FindByIDs(sID, tID string) (Link, error) {
+	for _, l := range ll {
+		if l.SourceID() == sID && l.TargetID() == tID {
+			return l, nil
+		}
+	}
+
+	return nil, errors.New(`Link("` + sID + `","` + tID + `") not found`)
+}
+
+// Add appends a link if isn't already append
+func (ll *LinkList) Add(l Link) {
+	_, err := ll.FindByIDs(l.SourceID(), l.TargetID())
+	if err == nil {
+		return
+	}
+	*ll = append(*ll, l)
 }

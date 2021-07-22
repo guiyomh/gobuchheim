@@ -54,7 +54,6 @@ func TestFindByID(t *testing.T) {
 }
 
 func TestAddOutgoingLink(t *testing.T) {
-
 	t.Run("Should have 0 out going link", func(t *testing.T) {
 		a := NewDependencyNode("a", "A")
 		assert.Len(t, a.OutgoingLink(), 0)
@@ -67,5 +66,20 @@ func TestAddOutgoingLink(t *testing.T) {
 		assert.Len(t, a.OutgoingLink(), 1)
 		assert.Equal(t, link, a.OutgoingLink()[0])
 	})
+}
 
+func TestNodeListAdd(t *testing.T) {
+	t.Run("Should add a node in the list", func(t *testing.T) {
+		list := NodeList{}
+		n := NewDependencyNode("a", "b")
+		list.Add(n)
+		assert.Len(t, list, 1)
+	})
+
+	t.Run("Should doesn't add a node in the list", func(t *testing.T) {
+		list := NodeList{NewDependencyNode("a", "b"), NewDependencyNode("b", "c")}
+		n := NewDependencyNode("a", "b")
+		list.Add(n)
+		assert.Len(t, list, 2)
+	})
 }
